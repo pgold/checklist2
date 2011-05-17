@@ -1,16 +1,9 @@
 <?php
 	include "laHandler.php";
 
+	$users = json_decode(file_get_contents("config/users.json"), true);
+	$problems = json_decode(file_get_contents("config/problems.json"), true);
 
-	$users = array(
-		array('name' => 'luiza', 'id' => 20748),
-		array('name' => 'pgold', 'id' => 11395),
-		array('id' => 9242, 'name' => 'Mauricio C'),
-	);
-	$problems = array(
-		array('id' => 2006, 'judge' => 'live'),
-		array('id' => 2007, 'judge' => 'live'),
-	);
 	// $problems = array_map(function($p) { $p['name'] = $p['id']; return $p; }, $problems); // Works only with PHP version >= 5.3
 	foreach($problems as $k => $problem) {
 		$problems[$k]['name'] = $problem['id'];
