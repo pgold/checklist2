@@ -12,8 +12,8 @@
 		array('id' => 2007, 'judge' => 'live'),
 	);
 	// $problems = array_map(function($p) { $p['name'] = $p['id']; return $p; }, $problems); // Works only with PHP version >= 5.3
-	foreach($problems as &$problem) {
-		$problem['name'] = $problem['id'];
+	foreach($problems as $k => $problem) {
+		$problems[$k]['name'] = $problem['id'];
 	}
 
 	$live = new laHandler;
