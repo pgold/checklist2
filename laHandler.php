@@ -10,6 +10,8 @@ class LaHandler {
            'http://livearchive.onlinejudge.org/index.php?option=com_comprofiler&task=login');
     define('LIST_URL_PREFIX',
            'http://livearchive.onlinejudge.org/index.php?option=com_onlinejudge&page=show_authorstats&userid=');
+    define('PROBLEM_URL_PREFIX',
+           'http://livearchive.onlinejudge.org/index.php?option=com_onlinejudge&page=show_problem&problem=');
 
     libxml_use_internal_errors(true);
   }
@@ -82,6 +84,14 @@ class LaHandler {
     $this->logIn();
     $problems = array_map(array($this, "getSolvedProblemsForUser"), $users);
     return array_combine($users, $problems);
+  }
+
+  public function getProblemURL($problemId) {
+  	return PROBLEM_URL_PREFIX.$problemId;
+  }
+
+  public function getUserURL($userId) {
+  	return LIST_URL_PREFIX.$userId;
   }
 }
 ?>
