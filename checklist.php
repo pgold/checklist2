@@ -11,14 +11,19 @@
 		array('id' => 2006, 'judge' => 'live'),
 		array('id' => 2007, 'judge' => 'live'),
 	);
-	$problems = array_map(function($p) { $p['name'] = $p['id']; return $p; }, $problems);
-
-
+	// $problems = array_map(function($p) { $p['name'] = $p['id']; return $p; }, $problems); // Works only with PHP version >= 5.3
+	foreach($problems as &$problem) {
+		$problem['name'] = $problem['id'];
+	}
 
 	$live = new laHandler;
 
-
-  	$ut = $live->getSolvedProblemsForUsers(array_map(function($u){return $u['id'];}, $users));
+  	// $ut = $live->getSolvedProblemsForUsers(array_map(function($u){return $u['id'];}, $users)); // Works only with PHP version >= 5.3
+	$ut = array();
+	foreach($users as $user) {
+		$ut[] = $user['id'];
+	}
+  	$ut = $live->getSolvedProblemsForUsers($ut);
 
 	$lt = array();
 	foreach($users as $user) {
