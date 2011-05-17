@@ -56,7 +56,7 @@ class LaHandler {
     curl_close($ch);
     $xpath = new DOMXPath($dom);
 
-    if($xpath->query("//mod_login_greeting")->length > 0) {
+    if($xpath->query("//span[@id='mod_login_greeting']")->length == 0) {
       // Não estamos logados. Qual o tratamento de erro adequado, dado que
       // a gente *acabou* de logar?
       assert(false);
