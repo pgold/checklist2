@@ -87,7 +87,7 @@ class LaHandler {
   }
 
   public function getProblemURL($problemId) {
-  	return PROBLEM_URL_PREFIX.$problemId;
+  	return PROBLEM_URL_PREFIX.($problemId-1999);
   }
 
   public function getUserURL($userId) {
