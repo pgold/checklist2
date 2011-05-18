@@ -1,12 +1,21 @@
 <?php
 	include "laHandler.php";
 
+	$problemsFile = "config/problems.json";
+	$otherFiles = array("b" => "config/brasileira.json",
+	                    "m" => "config/mundial.json",
+			   );
+
+        if(isset($_GET["p"]) && isset($otherFiles[$_GET["p"]])) {
+	  $problemsFile = $otherFiles[$_GET["p"]];
+        }
+
 	$users = json_decode(file_get_contents("config/users.json"), true);
-	$problems = json_decode(file_get_contents("config/problems.json"), true);
+	$problems = json_decode(file_get_contents($problemsFile), true);
 
 	// $problems = array_map(function($p) { $p['name'] = $p['id']; return $p; }, $problems); // Works only with PHP version >= 5.3
 	foreach($problems as $k => $problem) {
-		$problems[$k]['name'] = $problem['id'];
+		$problems[$k]['name'] = $problem['id'] . ' - ' . $problem['name'];
 	}
 
 	$live = new laHandler;
