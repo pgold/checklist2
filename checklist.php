@@ -72,6 +72,7 @@
 							$text = "&nbsp;";
 							if ($lt[$user['id']][$problem['id']]) {
 								$solvers++;
+								$user['solved']++;
 								$color =  "#55FF55";
 								//$text = "AC";
 							}
