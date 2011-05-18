@@ -36,8 +36,8 @@
 			<tr>
 				<td colspan='2'>Checklist</td>
 
-				<?php foreach($users as &$user) { ?>
-					<?php $user['solved'] = 0; ?>
+				<?php foreach($users as $k => $user) { ?>
+					<?php $users[$k]['solved'] = 0; ?>
 					<td>
 						<a href='<?=$live->getUserURL($user['id'])?>'><?=$user['name']?></a>
 					</td>
@@ -66,13 +66,13 @@
 					<td colspan='2'>
 						<a href="<?=$live->getProblemURL($problem['id'])?>"><?=$problem['judge'].": ".$problem['name']?></a>
 					</td>
-					<?php foreach($users as $user) { ?>
+					<?php foreach($users as $k => $user) { ?>
 						<?php
 							$color = '#FFFFFF';
 							$text = "&nbsp;";
 							if ($lt[$user['id']][$problem['id']]) {
 								$solvers++;
-								$user['solved']++;
+								$users[$k]['solved']++;
 								$color =  "#55FF55";
 								//$text = "AC";
 							}
