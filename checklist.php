@@ -1,5 +1,6 @@
 <?php
 	include "laHandler.php";
+	include "spojHandler.php";
 
 	$problemsFile = "config/problems.json";
 	$otherFiles = array("b" => "config/brasileira.json",
@@ -19,18 +20,34 @@
 	}
 
 	$live = new laHandler;
+	$spoj = new spojHandler;
 
   	// $ut = $live->getSolvedProblemsForUsers(array_map(function($u){return $u['id'];}, $users)); // Works only with PHP version >= 5.3
-	$ut = array();
+	$liveIds = array();
 	foreach($users as $user) {
-		$ut[] = $user['id'];
+		if(isset($user['liveId'])) {
+			$liveIds[] = $user['liveId'];
+		}
 	}
-  	$ut = $live->getSolvedProblemsForUsers($ut);
+  	$liveUt = $live->getSolvedProblemsForUsers($liveIds);
 
-	$lt = array();
+	$spojIds = array();
+	foreach($users as $user) {
+		if(isset($user['spojId'])) {
+			$spojIds[] = $user['spojId'];
+		}
+	}
+	$spojUt = $spoj->getSolvedProblemsForUsers($spojIds);
+
+	$liveLt = array();
+	$spojLt = array();
 	foreach($users as $user) {
 		foreach($problems as $problem) {
-			$lt[$user['id']][$problem['id']] = array_key_exists($problem['id'], $ut[$user['id']]);
+			if($problem['judge'] == 'live' && isset($user['liveId'])) {
+				$liveLt[$user['liveId']][$problem['id']] = array_key_exists($problem['id'], $liveUt[$user['liveId']]);
+			} else if($problem['judge'] == 'spoj' && isset($user['spojId'])) {
+				$spojLt[$user['spojId']][$problem['id']] = array_key_exists($problem['id'], $spojUt[$user['spojId']]);
+			}
 		}
 	}
 ?>
@@ -48,7 +65,7 @@
 				<?php foreach($users as $k => $user) { ?>
 					<?php $users[$k]['solved'] = 0; ?>
 					<td>
-						<a href='<?=$live->getUserURL($user['id'])?>'><?=$user['name']?></a>
+						<a href='<?=$live->getUserURL($user['liveId'])?>'><?=$user['name']?></a>
 					</td>
 				<?php } ?>
 
@@ -73,13 +90,22 @@
 					?>
 
 					<td colspan='2'>
-						<a href="<?=$live->getProblemURL($problem['id'])?>"><?=$problem['judge'].": ".$problem['name']?></a>
+						<?php
+							$url = '';
+							if($problem['judge'] == 'live') {
+								$url = $live->getProblemURL($problem['id']);
+							} else if($problem['judge'] == 'spoj') {
+								$url = $spoj->getProblemURL($problem['id']);
+							}
+						?>
+						<a href="<?=$url?>"><?=$problem['judge'].": ".$problem['name']?></a>
 					</td>
 					<?php foreach($users as $k => $user) { ?>
 						<?php
 							$color = '#FFFFFF';
 							$text = "&nbsp;";
-							if ($lt[$user['id']][$problem['id']]) {
+							if (($problem['judge'] == 'live' && isset($user['liveId']) && $liveLt[$user['liveId']][$problem['id']])
+							 || ($problem['judge'] == 'spoj' && isset($user['spojId']) && $spojLt[$user['spojId']][$problem['id']])) {
 								$solvers++;
 								$users[$k]['solved']++;
 								$color =  "#55FF55";
