@@ -83,7 +83,9 @@ class LaHandler {
   public function getSolvedProblemsForUsers($users) {
     $this->logIn();
     $problems = array_map(array($this, "getSolvedProblemsForUser"), $users);
-    return array_combine($users, $problems);
+
+	if(0 == count($users)) return array();
+	else return array_combine($users, $problems);
   }
 
   public function getProblemURL($problemId) {

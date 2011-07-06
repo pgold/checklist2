@@ -17,7 +17,6 @@ class SpojHandler {
     $xpath = new DOMXPath($dom);
 
 	$nodeList = $xpath->query("//table[@align='center']//td/a[starts-with(@href,'/status/')]");
-	var_dump($nodeList);
     $ret = array();
     foreach($nodeList as $node) {
 		$href = $node->getAttribute( 'href' );
@@ -31,7 +30,9 @@ class SpojHandler {
 
   public function getSolvedProblemsForUsers($users) {
     $problems = array_map(array($this, "getSolvedProblemsForUser"), $users);
-    return array_combine($users, $problems);
+
+	if(0 == count($users)) return array();
+	else return array_combine($users, $problems);
   }
 
   public function getProblemURL($problemId) {
